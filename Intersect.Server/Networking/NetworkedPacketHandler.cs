@@ -943,7 +943,14 @@ internal sealed partial class NetworkedPacketHandler
                     obj = UserVariableBase.Get(id);
 
                     break;
+                case GameObjectType.Fishes:
+                    obj = DatabaseObject<FishBase>.Lookup.Get(id);
 
+                    break;
+                case GameObjectType.FishingSpot:
+                    obj = DatabaseObject<FishingSpotBase>.Lookup.Get(id);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1072,7 +1079,14 @@ internal sealed partial class NetworkedPacketHandler
                     obj = UserVariableBase.Get(id);
 
                     break;
+                case GameObjectType.Fishes:
+                    obj = DatabaseObject<FishBase>.Lookup.Get(id);
 
+                    break;
+                case GameObjectType.FishingSpot:
+                    obj = DatabaseObject<FishingSpotBase>.Lookup.Get(id);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

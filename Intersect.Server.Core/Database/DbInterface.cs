@@ -735,6 +735,14 @@ public static partial class DbInterface
                 UserVariableBase.Lookup.Clear();
 
                 break;
+            case GameObjectType.Fishes:
+                FishBase.Lookup.Clear();
+
+                break;
+            case GameObjectType.FishingSpot:
+                FishingSpotBase.Lookup.Clear();
+
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
@@ -885,6 +893,20 @@ public static partial class DbInterface
                         }
 
                         break;
+                    case GameObjectType.Fishes:
+                        foreach (var fish in context.Fishes)
+                        {
+                            FishBase.Lookup.Set(fish.Id, fish);
+                        }
+
+                        break;
+                    case GameObjectType.FishingSpot:
+                        foreach (var fish in context.FishingSpots)
+                        {
+                            FishingSpotBase.Lookup.Set(fish.Id, fish);
+                        }
+
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                 }
@@ -991,6 +1013,14 @@ public static partial class DbInterface
 
             case GameObjectType.UserVariable:
                 dbObj = new UserVariableBase(predefinedid);
+
+                break;
+            case GameObjectType.Fishes:
+                dbObj = new FishBase(predefinedid);
+
+                break;
+            case GameObjectType.FishingSpot:
+                dbObj = new FishingSpotBase(predefinedid);
 
                 break;
             default:
@@ -1116,6 +1146,18 @@ public static partial class DbInterface
                     case GameObjectType.UserVariable:
                         context.UserVariables.Add((UserVariableBase)dbObj);
                         UserVariableBase.Lookup.Set(dbObj.Id, dbObj);
+
+                        break;
+
+                    case GameObjectType.Fishes:
+                        context.Fishes.Add((FishBase)dbObj);
+                        FishBase.Lookup.Set(dbObj.Id, dbObj);
+
+                        break;
+
+                    case GameObjectType.FishingSpot:
+                        context.FishingSpots.Add((FishingSpotBase)dbObj);
+                        FishingSpotBase.Lookup.Set(dbObj.Id, dbObj);
 
                         break;
 
@@ -1252,6 +1294,14 @@ public static partial class DbInterface
                         break;
                     case GameObjectType.UserVariable:
                         context.UserVariables.Remove((UserVariableBase)gameObject);
+
+                        break;
+                    case GameObjectType.Fishes:
+                        context.Fishes.Remove((FishBase)gameObject);
+
+                        break;
+                    case GameObjectType.FishingSpot:
+                        context.FishingSpots.Remove((FishingSpotBase)gameObject);
 
                         break;
                 }
@@ -1401,6 +1451,14 @@ public static partial class DbInterface
                         break;
                     case GameObjectType.UserVariable:
                         context.UserVariables.Update((UserVariableBase)gameObject);
+
+                        break;
+                    case GameObjectType.Fishes:
+                        context.Fishes.Update((FishBase)gameObject);
+
+                        break;
+                    case GameObjectType.FishingSpot:
+                        context.FishingSpots.Update((FishingSpotBase)gameObject);
 
                         break;
                 }
@@ -2155,7 +2213,7 @@ public static partial class DbInterface
     }
 
     //Code taken from Stackoverflow on 9/20/2018
-    //Answer by Dai and Damian Leszczyński - Vash
+    //Answer by Dai and Damian LeszczyЕ„ski - Vash
     //https://stackoverflow.com/questions/3404421/password-masking-console-application
     public static string GetPassword()
     {

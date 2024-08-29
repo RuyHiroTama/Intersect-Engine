@@ -45,4 +45,8 @@ public interface IGameContext : IDbContext
     DbSet<TilesetBase> Tilesets { get; set; }
 
     DbSet<TimeBase> Time { get; set; }
+
+    DbSet<FishBase> Fishes { get; set; }
+
+    DbSet<FishingSpotBase> FishingSpots { get; set; }
 }

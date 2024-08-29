@@ -1,3 +1,4 @@
+using System.IO.Abstractions;
 using Intersect.Extensions;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
@@ -64,4 +65,10 @@ public enum GameObjectType
 
     [GameObjectInfo(typeof(UserVariableBase), "user_variables")]
     UserVariable,
+
+    [GameObjectInfo(typeof(FishBase), "fishes")]
+    Fishes = 200,
+
+    [GameObjectInfo(typeof(FishingSpotBase), "fishingSpots")]
+    FishingSpot = 201,
 }

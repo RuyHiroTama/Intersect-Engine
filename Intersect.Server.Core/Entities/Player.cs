@@ -273,6 +273,8 @@ public partial class Player : Entity
 
     private long mGlobalCooldownTimer;
 
+    public FishEventServer fishEvent;
+
     [NotMapped, JsonIgnore]
     public bool IsInParty => Party != null && Party.Count > 1;
 
@@ -686,6 +688,11 @@ public partial class Player : Entity
 
 
                 base.Update(timeMs);
+
+                if (fishEvent == null || fishEvent == default)
+                    fishEvent = new FishEventServer(this);
+                if (fishEvent != null)
+                    fishEvent.FishingUpdate();
 
                 if (mAutorunCommonEventTimer < Timing.Global.Milliseconds)
                 {

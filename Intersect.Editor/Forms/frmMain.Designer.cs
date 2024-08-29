@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Windows.Forms;
 using DarkUI.Controls;
 using DarkUI.Renderers;
@@ -107,6 +107,8 @@ namespace Intersect.Editor.Forms
             this.commonEventEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.craftsEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.craftingTableEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fishesEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fishingSpotEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.npcEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectileEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -809,6 +811,8 @@ namespace Intersect.Editor.Forms
             this.commonEventEditorToolStripMenuItem,
             this.craftsEditorToolStripMenuItem,
             this.craftingTableEditorToolStripMenuItem,
+            this.fishesEditorToolStripMenuItem,
+            this.fishingSpotEditorToolStripMenuItem,
             this.itemEditorToolStripMenuItem,
             this.npcEditorToolStripMenuItem,
             this.projectileEditorToolStripMenuItem,
@@ -862,6 +866,22 @@ namespace Intersect.Editor.Forms
             this.craftingTableEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.craftingTableEditorToolStripMenuItem.Text = "Crafting Table Editor";
             this.craftingTableEditorToolStripMenuItem.Click += new System.EventHandler(this.craftingTablesEditorToolStripMenuItem_Click);
+            // 
+            // fishesEditorToolStripMenuItem
+            // 
+            this.fishesEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.fishesEditorToolStripMenuItem.Name = "fishesEditorToolStripMenuItem";
+            this.fishesEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.fishesEditorToolStripMenuItem.Text = "Fishes Editor";
+            this.fishesEditorToolStripMenuItem.Click += new System.EventHandler(this.fishesEditorToolStripMenuItem_Click);// 
+            //
+            // fishingSpotEditorToolStripMenuItem
+            // 
+            this.fishingSpotEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.fishingSpotEditorToolStripMenuItem.Name = "fishingSpotEditorToolStripMenuItem";
+            this.fishingSpotEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.fishingSpotEditorToolStripMenuItem.Text = "Fishing Spot Editor";
+            this.fishingSpotEditorToolStripMenuItem.Click += new System.EventHandler(this.fishingSpotEditorToolStripMenuItem_Click);
             // 
             // itemEditorToolStripMenuItem
             // 
@@ -1123,5 +1143,7 @@ namespace Intersect.Editor.Forms
         private ToolStripMenuItem packageUpdateToolStripMenuItem;
         private ToolStripMenuItem layersToolStripMenuItem;
         private ToolStripMenuItem hideEventsToolStripMenuItem;
+        private ToolStripMenuItem fishesEditorToolStripMenuItem;
+        private ToolStripMenuItem fishingSpotEditorToolStripMenuItem;
     }
 }

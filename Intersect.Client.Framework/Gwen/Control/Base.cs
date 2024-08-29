@@ -373,6 +373,22 @@ public partial class Base : IDisposable
         }
     }
 
+    public Point AlignmentTransform
+    {
+        get => mAlignmentTransform;
+        set
+        {
+            if (mAlignmentTransform == value)
+            {
+                return;
+            }
+
+            mAlignmentTransform = value;
+            Invalidate();
+            InvalidateParent();
+        }
+    }
+
     /// <summary>
     ///     Current padding - inner spacing.
     /// </summary>

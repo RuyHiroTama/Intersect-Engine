@@ -679,6 +679,35 @@ internal sealed partial class PacketHandler
                 }
 
                 break;
+            case GameObjectType.Fishes:
+                if (deleted)
+                {
+                    var cft = FishBase.Get(id);
+                    cft.Delete();
+                }
+                else
+                {
+                    var cft = new FishBase(id);
+                    cft.Load(json);
+                    FishBase.Lookup.Set(id, cft);
+                }
+
+                break;
+
+            case GameObjectType.FishingSpot:
+                if (deleted)
+                {
+                    var cft = FishingSpotBase.Get(id);
+                    cft.Delete();
+                }
+                else
+                {
+                    var cft = new FishingSpotBase(id);
+                    cft.Load(json);
+                    FishingSpotBase.Lookup.Set(id, cft);
+                }
+
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }

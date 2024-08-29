@@ -46,6 +46,15 @@ public partial class Sound : ISound
             Loaded = true;
         }
     }
+    public int Volume
+    {
+        get => (int)mVolume;
+        set
+        {
+            mVolume = value;
+            mSound.SetVolume((int)mVolume);
+        }
+    }
 
     public bool Loop
     {

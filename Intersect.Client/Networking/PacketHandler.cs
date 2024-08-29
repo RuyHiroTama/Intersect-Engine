@@ -1103,6 +1103,60 @@ internal sealed partial class PacketHandler
         }
     }
 
+    public void HandlePacket(IPacketSender packetSender, EntityFishingPacket packet)
+    {
+        Guid id = packet.Id;
+        var type = packet.Type;
+        Guid mapId = packet.MapId;
+        bool isFishing = packet.IsFishing;
+        int stage = packet.Stage;
+        bool isPressed = packet.IsPressed;
+
+        #region EntityValidate
+
+        Entity en = null;
+        if (type < EntityType.Event)
+        {
+            if (!Globals.Entities.ContainsKey(id))
+            {
+                return;
+            }
+
+            en = Globals.Entities[id];
+        }
+        else
+        {
+            var entityMap = MapInstance.Get(mapId);
+            if (entityMap == null)
+            {
+                return;
+            }
+
+            if (!entityMap.LocalEntities.ContainsKey(id))
+            {
+                return;
+            }
+
+            en = entityMap.LocalEntities[id];
+        }
+
+        if (en == null)
+        {
+            return;
+        }
+
+        #endregion
+
+        var isSelf = en == Globals.Me;
+
+        if (!isSelf)
+        {
+            en.isFishing = isFishing;
+            en.FishingStage = stage;
+            en.IsFishingRodPressed = isPressed;
+        }
+    }
+
     //EntityDiePacket
     public void HandlePacket(IPacketSender packetSender, EntityDiePacket packet)
     {
@@ -2185,4 +2239,13 @@ internal sealed partial class PacketHandler
         }
     }
 
+    public void HandlePacket(IPacketSender packetSender, SendClientFish packet)
+    {
+        Globals.Me.fishEvent.TheFishWasCaught(packet.FishID);
+    }
+
+    public void HandlePacket(IPacketSender packetSender, SendClientResultCastFishingRod packet)
+    {
+        Globals.Me.fishEvent.FishingRodCastHundler(packet.IsSuccess);
+    }
 }

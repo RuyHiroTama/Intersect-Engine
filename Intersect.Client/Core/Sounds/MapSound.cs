@@ -61,6 +61,16 @@ public partial class MapSound : Sound, IMapSound
         return false;
     }
 
+    private float mVolumeLocalMultiple;
+    public float Volume
+    {
+        get => mVolumeLocalMultiple;
+        set
+        {
+            mVolumeLocalMultiple = Math.Clamp(value, 0, 1);
+        }
+    }
+
     private void UpdateSoundVolume()
     {
         if (mMapId == Guid.Empty)
@@ -89,8 +99,7 @@ public partial class MapSound : Sound, IMapSound
                 {
                     volume = 0f;
                 }
-
-                mSound?.SetVolume((int)volume);
+                mSound?.SetVolume((int)(volume * mVolumeLocalMultiple));
             }
             else
             {

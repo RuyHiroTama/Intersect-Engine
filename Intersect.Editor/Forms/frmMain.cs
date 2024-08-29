@@ -63,6 +63,10 @@ public partial class FrmMain : Form
 
     private FrmQuest mQuestEditor;
 
+    private FrmFishes mFishesEditor;
+
+    private FrmFishingSpots mFishingSpotEditor;
+
     private FrmResource mResourceEditor;
 
     private FrmShop mShopEditor;
@@ -195,6 +199,8 @@ public partial class FrmMain : Form
         spellEditorToolStripMenuItem.Text = Strings.MainForm.spelleditor;
         variableEditorToolStripMenuItem.Text = Strings.MainForm.variableeditor;
         timeEditorToolStripMenuItem.Text = Strings.MainForm.timeeditor;
+        fishesEditorToolStripMenuItem.Text = Strings.MainForm.fisheseditor;
+        fishingSpotEditorToolStripMenuItem.Text = Strings.MainForm.fishingspoteditor;
     }
 
     private void InitLocalizationMenuTools()
@@ -1249,6 +1255,16 @@ public partial class FrmMain : Form
         PacketSender.SendOpenEditor(GameObjectType.Crafts);
     }
 
+    private void fishesEditorToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        PacketSender.SendOpenEditor(GameObjectType.Fishes);
+    }
+
+    private void fishingSpotEditorToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        PacketSender.SendOpenEditor(GameObjectType.FishingSpot);
+    }
+
     private void animationEditorToolStripMenuItem_Click(object sender, EventArgs e)
     {
         PacketSender.SendOpenEditor(GameObjectType.Animation);
@@ -1715,6 +1731,24 @@ public partial class FrmMain : Form
                         mTimeEditor = new FrmTime();
                         mTimeEditor.InitEditor(TimeBase.GetTimeBase());
                         mTimeEditor.Show();
+                    }
+
+                    break;
+                case GameObjectType.Fishes:
+                    if (mFishesEditor == null || mFishesEditor.Visible == false)
+                    {
+                        mFishesEditor = new FrmFishes();
+                        mFishesEditor.InitEditor();
+                        mFishesEditor.Show();
+                    }
+
+                    break;
+                case GameObjectType.FishingSpot:
+                    if (mFishingSpotEditor == null || mFishingSpotEditor.Visible == false)
+                    {
+                        mFishingSpotEditor = new FrmFishingSpots();
+                        mFishingSpotEditor.InitEditor();
+                        mFishingSpotEditor.Show();
                     }
 
                     break;

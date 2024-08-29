@@ -931,16 +931,27 @@ public static partial class Graphics
                             if (attributesTex != null)
                             {
                                 var blue = (attr is MapWarpAttribute warp && warp.ChangeInstance) ? 0 : 255;
+                                int index = 0;
+                                System.Drawing.Color _color = System.Drawing.Color.FromArgb(255, 255, 255, blue);
+                                /*if (attr is MapGlobalZoneAttribute zoneID)
+                                {
+                                    GlobalMapZoneBase zone = GlobalMapZoneBase.Get(zoneID.ZoneType);
+                                    index = zone.IconID;
+                                    _color = System.Drawing.Color.FromArgb(zone.Color.A, zone.Color.R, zone.Color.G, zone.Color.B);
+                                }*/
+                                int maxCountX = 5;
+                                float offset = attributesTex.Width / maxCountX * index;
+
                                 DrawTexture(
                                    attributesTex,
                                    new RectangleF(
-                                       0,
-                                       ((int)tmpMap.Attributes[x, y].Type - 1) * attributesTex.Width,
-                                       attributesTex.Width,
-                                       attributesTex.Width
+                                       offset,
+                                       ((int)tmpMap.Attributes[x, y].Type - 1) * (attributesTex.Width / maxCountX),
+                                       attributesTex.Width / maxCountX,
+                                       attributesTex.Width / maxCountX
                                    ),
                                    tileBounds,
-                                   System.Drawing.Color.FromArgb(255, 255, 255, blue),
+                                   _color,
                                    null
                                 );
                             }

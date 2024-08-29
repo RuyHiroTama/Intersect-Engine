@@ -157,6 +157,7 @@ public static partial class Globals
     //Crafting station
     public static bool InCraft = false;
 
+    public static bool InFishing = false;
     public static bool InShop => GameShop != null;
 
     public static bool InTrade = false;

@@ -1,4 +1,4 @@
-﻿using Intersect.Editor.Core;
+using Intersect.Editor.Core;
 using Intersect.Editor.Forms.Editors.Events.Event_Commands;
 using Intersect.Editor.Localization;
 using Intersect.GameObjects.Conditions;
@@ -28,7 +28,11 @@ public enum RequirementType
 
     NpcCanBeAttacked,
 
-    Craft
+    Craft, 
+    
+    Fish = 200,
+
+    FishingSpot = 201,
 
 }
 
@@ -98,6 +102,14 @@ public partial class FrmDynamicRequirements : Form
                 break;
             case RequirementType.Craft:
                 lblInstructions.Text = Strings.DynamicRequirements.instructionscraft;
+
+                break;
+            case RequirementType.Fish:
+                lblInstructions.Text = Strings.DynamicRequirements.instructionsfish;
+
+                break;
+            case RequirementType.FishingSpot:
+                lblInstructions.Text = Strings.DynamicRequirements.instructionsfishingspot;
 
                 break;
             default:

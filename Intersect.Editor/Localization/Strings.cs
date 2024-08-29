@@ -567,12 +567,17 @@ public static partial class Strings
                             DeserializeDictionary(missingStrings, groupType, fieldInfo, fieldValue, serializedGroup, serializedValue, stringDictionary);
                             break;
 
+                        case Dictionary<MapInstanceType, LocalizedString> localeDictionary:
+
+                            DeserializeDictionary(missingStrings, groupType, fieldInfo, fieldValue, serializedGroup, serializedValue, localeDictionary);
+                            break;
+
                         default:
                             {
                                 var fieldType = fieldInfo.FieldType;
                                 if (!fieldType.IsGenericType || typeof(Dictionary<,>) != fieldType.GetGenericTypeDefinition())
                                 {
-                                    Log.Error(new NotSupportedException($"Unsupported localization type for {groupType.Name}.{fieldInfo.Name}: {fieldInfo.FieldType.FullName}"));
+                                    Log.Error(new NotSupportedException($"Unsupported localization type for {groupType.Name}.{fieldInfo.Name}: {fieldInfo.FieldType.FullName}. Value: {fieldValue}"));
                                     break;
                                 }
 
@@ -860,6 +865,7 @@ public static partial class Strings
             {(int) MapAttribute.Walkable, @"Walkable" },
             {(int) MapAttribute.Warp, @"Warp" },
             {(int) MapAttribute.ZDimension, @"Z-Dimension" },
+            {(int) MapAttribute.FishingSpot, @"Fishing Spot" },
         };
 
         public static string FormatSpawnLevel(int level)
@@ -984,6 +990,14 @@ public static partial class Strings
         public static LocalizedString ZLevel2 = @"Level 2";
 
         public static LocalizedString ZNone = @"None";
+
+        public static LocalizedString FishingSpot = @"Fishing Spot";
+
+        public static LocalizedString FishingSpotBlock = @"Blocked?";
+
+        public static LocalizedString FishingSpotType = @"Spot Type";
+
+        public static LocalizedString FishingSpotDirection = @"Direction";
     }
 
     public partial struct ClassEditor
@@ -1431,6 +1445,158 @@ Tick timer saved in server config.json.";
 
     }
 
+    public partial struct FishingSpotEditor
+    {
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString cancel = @"Cancel";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString copy = @"Copy Spot";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString fishes = @"Available Fishes";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString delete = @"Delete Spot";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString deleteprompt =
+            @"Are you sure you want to delete this spot? This action cannot be reverted!";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString folderlabel = @"Folder:";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString foldertitle = @"Add Folder";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString general = @"General";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString name = @"Name:";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString New = @"New Spot";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString paste = @"Paste Spot";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString save = @"Save";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString searchplaceholder = @"Search...";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString sortalphabetically = @"Order Alphabetically";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString tables = @"Spots";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString title = @"Fishing Spots Editor";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString undo = @"Undo Changes";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString undoprompt =
+            @"Are you sure you want to undo changes made to this spot? This action cannot be reverted!";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString undotitle = @"Undo Changes";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString addfishlabel = @"Add Fish To Be Fishing:";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString add = @"Add Selected";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString remove = @"Remove Selected";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+
+        public static LocalizedString fishingtimemin = @"Fishing Time Min (MS)";
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString fishingtimemax = @"Fishing Time Max (MS)";
+    }
+
+    public partial struct FishesEditor
+    {
+
+        public static LocalizedString cancel = @"Cancel";
+
+        public static LocalizedString copy = @"Copy Fish";
+
+        public static LocalizedString fishes = @"Fishes";
+
+        public static LocalizedString delete = @"Delete Fish";
+
+        public static LocalizedString deletefish = @"Delete";
+
+
+        public static LocalizedString deleteprompt =
+            @"Are you sure you want to delete this? This action cannot be reverted!";
+
+        public static LocalizedString deletetitle = @"Delete Fish";
+
+        public static LocalizedString duplicatefish = @"Duplicate";
+
+        public static LocalizedString folderlabel = @"Folder:";
+
+        public static LocalizedString foldertitle = @"Add Folder";
+
+        public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
+
+        public static LocalizedString general = @"General";
+
+        public static LocalizedString item = @"Item:";
+
+        public static LocalizedString name = @"Name:";
+
+        public static LocalizedString New = @"New Fish";
+
+        public static LocalizedString parameters = @"Parameters";
+
+        public static LocalizedString paste = @"Paste Fish";
+
+        public static LocalizedString save = @"Save";
+
+        public static LocalizedString searchplaceholder = @"Search...";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString sortalphabetically = @"Order Alphabetically";
+
+        public static LocalizedString title = @"Fishes Editor";
+
+        public static LocalizedString undo = @"Undo Changes";
+
+        public static LocalizedString undoprompt =
+            @"Are you sure you want to undo changes made to this? This action cannot be reverted!";
+
+        public static LocalizedString undotitle = @"Undo Changes";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public static LocalizedString commonevent = @"Common Event:";
+
+        public static LocalizedString position = @"Position";
+        public static LocalizedString weight = @"Weight";
+        public static LocalizedString pushStrength = @"Push Strength";
+        public static LocalizedString rangeSize = @"Range Size";
+        public static LocalizedString speedMove = @"Speed Move";
+        public static LocalizedString speedResize = @"Speed Resize";
+        public static LocalizedString strength = @"Strength";
+        public static LocalizedString timeChangeRangeSize = @"Timer Change Resize (MS)";
+        public static LocalizedString nudTimeChangeSpeed = @"Timer Change Speed (MS)";
+        public static LocalizedString coeffUnpredictability = @"Coeff Unpredictability (%)";
+        public static LocalizedString chance = @"Chance (%)";
+    }
+
     public partial struct Direction
     {
         public static Dictionary<int, LocalizedString> CritterDirection = new Dictionary<int, LocalizedString>()
@@ -1505,6 +1671,12 @@ Tick timer saved in server config.json.";
 
         public static LocalizedString instructionsspell =
             @"Below are condition lists. If conditions are met on any of the lists then the player can use cast the spell.";
+
+        public static LocalizedString instructionsfish =
+            @"Below are condition lists. If conditions are met on any of the lists then the player can fishing this fish.";
+
+        public static LocalizedString instructionsfishingspot =
+            @"Below are condition lists.If the conditions in any of the lists are met, the player can fish in that location.";
 
         public static LocalizedString listname = @"Desc:";
 
@@ -4008,6 +4180,10 @@ Tick timer saved in server config.json.";
         public static LocalizedString craftingtableeditor = @"Crafting Table Editor";
 
         public static LocalizedString craftingeditor = @"Crafts Editor";
+
+        public static LocalizedString fisheseditor = @"Fishes Editor";
+
+        public static LocalizedString fishingspoteditor = @"Fishing Spot Editor";
 
         public static LocalizedString currentonly = @"Current Layer Only";
 

@@ -1016,6 +1016,14 @@ public static partial class PacketSender
         SendDataToProximityOnMapInstance(en.MapId, en.MapInstanceId, new EntityAttackPacket(en.Id, en.GetEntityType(), en.MapId, attackTime, isBlocking), null, TransmissionMode.Any);
     }
 
+    public static void SendEntityFishing(Entity en, bool isFishing, int stage, bool isPressed)
+    {
+        //Console.Write($"\n{en.Name} обновляет рыбалку isFishing:{isFishing} stage:{stage} isPressed:{isPressed}");
+        SendDataToProximityOnMapInstance(en.MapId, en.MapInstanceId,
+            new EntityFishingPacket(en.Id, en.GetEntityType(), en.MapId, isFishing, stage, isPressed)
+            , (Player)en, TransmissionMode.Any);
+    }
+
     //EntityDiePacket
     public static void SendEntityDie(Entity en)
     {
@@ -1837,6 +1845,20 @@ public static partial class PacketSender
                 }
 
                 break;
+            case GameObjectType.Fishes:
+                foreach (var obj in FishBase.Lookup)
+                {
+                    SendGameObject(client, obj.Value, false, false, packetList);
+                }
+
+                break;
+            case GameObjectType.FishingSpot:
+                foreach (var obj in FishingSpotBase.Lookup)
+                {
+                    SendGameObject(client, obj.Value, false, false, packetList);
+                }
+
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
@@ -2367,4 +2389,13 @@ public static partial class PacketSender
         }
     }
 
+    //Отправить рыбу в ивент кленту
+    public static void SendClientFish(Player player, Guid fishID)
+    {
+        player.SendPacket(new SendClientFish(fishID));
+    }
+    public static void SendClientResultCastFishingRod(Player player, bool result)
+    {
+        player.SendPacket(new SendClientResultCastFishingRod(result));
+    }
 }

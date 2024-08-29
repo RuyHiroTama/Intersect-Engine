@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace Intersect.Config;
 
@@ -71,6 +71,11 @@ public partial class SpriteOptions
     /// Defines the number of frames there will be in weapon attacking sprite sheets.
     /// </summary>
     public int WeaponFrames { get; set; } = 4;
+
+    /// <summary>
+    /// Defines the number of frames there will be in rod fishing sprite sheets.
+    /// </summary>
+    public int FishingFrames { get; set; } = 4;
 
     /// <summary>
     /// The number of rows in the sprite sheet that correspond to the number of directions supported in the game.

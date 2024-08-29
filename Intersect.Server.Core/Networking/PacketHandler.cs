@@ -1352,6 +1352,24 @@ internal sealed partial class PacketHandler
         }
     }
 
+    public void HandlePacket(Client client, FishingPacket packet)
+    {
+        var player = client?.Entity;
+        if (player == null)
+        {
+            return;
+        }
+        Guid id = player.Id;
+        var type = player.GetEntityType();
+        Guid mapId = player.MapId;
+        bool isFishing = packet.IsFishing;
+        int stage = packet.Stage;
+        bool isPressed = packet.IsPressed;
+
+        player.fishEvent.UpdateVisual(isFishing, stage, isPressed);
+
+    }
+
     //DirectionPacket
     public void HandlePacket(Client client, DirectionPacket packet)
     {
@@ -2946,6 +2964,39 @@ internal sealed partial class PacketHandler
                 player.Target = entity;
             }
         }
+    }
+
+    //Получаем место рыбалки
+    public void HandlePacket(Client client, SendFishingSpot packet)
+    {
+        Player player = client?.Entity;
+        if (player == null) return;
+
+        player.fishEvent.ServerCastFishingRod(packet.FishingSpotID);
+    }
+
+    public void HandlePacket(Client client, SendCancelFishing packet)
+    {
+        Player player = client?.Entity;
+        if (player == null) return;
+
+        player.fishEvent.ServerReturnFishingRod();
+    }
+
+    public void HandlePacket(Client client, SendSuccessFishing packet)
+    {
+        Player player = client?.Entity;
+        if (player == null) return;
+
+        player.fishEvent.FishingSuccess();
+    }
+
+    public void HandlePacket(Client client, SendFailedFishing packet)
+    {
+        Player player = client?.Entity;
+        if (player == null) return;
+
+        player.fishEvent.FishingFailed();
     }
 
     #endregion

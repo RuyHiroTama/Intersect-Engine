@@ -319,6 +319,7 @@ public partial class Entity : IEntity
                 SpriteAnimations.Shoot => Options.Instance.Sprites.ShootFrames,
                 SpriteAnimations.Cast => Options.Instance.Sprites.CastFrames,
                 SpriteAnimations.Weapon => Options.Instance.Sprites.WeaponFrames,
+                SpriteAnimations.FishingIdle => Options.Instance.Sprites.FishingFrames,
                 _ => Options.Instance.Sprites.NormalFrames,
             };
         }
@@ -889,10 +890,41 @@ public partial class Entity : IEntity
         }
 
         //Otherwise return the legacy attack speed calculation
-        return (int)(Options.MaxAttackRate +
+        int result = (int)(Options.MaxAttackRate +
                       (Options.MinAttackRate - Options.MaxAttackRate) *
                       (((float)Options.MaxStatValue - Stat[(int)Enums.Stat.Speed]) /
                        Options.MaxStatValue));
+        result = (int)(Options.MinAttackRate +
+                            (Options.MaxAttackRate - Options.MinAttackRate) *
+                            (float)(Stat[(int)Enums.Stat.Speed] / Options.MaxStatValue));
+
+        return result;
+
+        /*//                    CalculateAttackTime()
+        /// 
+        /// MinAttackRate =3 
+        /// MaxAttackRate =10
+        /// maxStat = 6 
+        /// curStat
+        /// 
+        /// current formula:
+        /// MaxAttackRate + (MinAttackRate - MaxAttackRate) * ((maxStat - curStat)/maxStat)
+        /// at values curStat=6 => 10 + (3 - 10) * 0 = 10;
+        /// at values curStat=0 => 10 + (3 - 10) * 1 = 3;
+        /// at values curStat=1 => = 4.19;
+        /// at values curStat=2 => = 5.38;
+        /// 
+        /// 
+        /// new formula:
+        /// MinAttackRate + (MaxAttackRate - MinAttackRate) * (curStat/maxStat)
+        /// at values curStat=6 => 3 + (10-3) * 1 = 10;
+        /// at values curStat=0 => 3 + (10-3) * 0 = 3;
+        /// at values curStat=1 => = 4.12;
+        /// at values curStat=2 => = 5.31;
+        /// 
+        /// 
+        /// 
+        //*/
     }
 
     /// <summary>
@@ -1320,8 +1352,14 @@ public partial class Entity : IEntity
         var filenameNoExt = Path.GetFileNameWithoutExtension(filename);
 
         // Equipment's custom paperdoll texture.
-        if (SpriteAnimation is SpriteAnimations.Attack or
-            SpriteAnimations.Cast or SpriteAnimations.Weapon or SpriteAnimations.Shoot)
+        if (SpriteAnimation is 
+            SpriteAnimations.Attack or
+            SpriteAnimations.Cast or 
+            SpriteAnimations.Weapon or 
+            SpriteAnimations.Shoot or
+            SpriteAnimations.FishingIdle or
+            SpriteAnimations.FishingUse or
+            SpriteAnimations.FishingFight)
         {
             // Extract animation name from the AnimatedTextures list.
             var animationName = Path.GetFileNameWithoutExtension(AnimatedTextures[SpriteAnimation].Name);
@@ -1338,8 +1376,10 @@ public partial class Entity : IEntity
             // If custom paperdoll texture exists, use it.
             if (customPaperdollTex != null)
             {
+                Log.Debug($"Ожидается для предмета файл = {filenameNoExt}_{customAnimationName}.png");
                 paperdollTex = customPaperdollTex;
             }
+            else Log.Debug($"Нет файла = {filenameNoExt}_{customAnimationName}.png");
         }
 
         // If there's no custom paperdoll: use the paperdoll texture based on the SpriteAnimation.
@@ -1891,6 +1931,12 @@ public partial class Entity : IEntity
         Status = [.. Status.OrderByDescending(x => x.RemainingMs)];
     }
 
+    public bool isFishing = false;
+    public int FishingStage = 0;
+    public int oldFishingStage = 0;
+    public bool IsFishingRodPressed = false;
+    private long FishAnimationTime;
+
     private void UpdateSpriteAnimation()
     {
         //Exit if textures haven't been loaded yet
@@ -1902,88 +1948,188 @@ public partial class Entity : IEntity
         var timingMilliseconds = Timing.Global.Milliseconds;
         var isNotBlockingAndCasting = !IsBlocking && !IsCasting;
 
-        SpriteAnimation = SpriteAnimations.Normal;
-        if (AnimatedTextures.TryGetValue(SpriteAnimations.Idle, out _) &&
-            LastActionTime + Options.Instance.Sprites.IdleStartDelay < timingMilliseconds &&
-            isNotBlockingAndCasting)
-        {
-            SpriteAnimation = SpriteAnimations.Idle;
-        }
-
-        if (IsMoving && !IsAttacking && isNotBlockingAndCasting)
+        if (!isFishing)
         {
             SpriteAnimation = SpriteAnimations.Normal;
-            LastActionTime = timingMilliseconds;
-        }
-
-        if (IsAttacking && isNotBlockingAndCasting)
-        {
-            // Normal sprite-sheets has their own handler for attacking frames.
-            if (AnimatedTextures.TryGetValue(SpriteAnimations.Normal, out _))
+            if (AnimatedTextures.TryGetValue(SpriteAnimations.Idle, out _) &&
+                LastActionTime + Options.Instance.Sprites.IdleStartDelay < timingMilliseconds &&
+                isNotBlockingAndCasting)
             {
-                return;
+                SpriteAnimation = SpriteAnimations.Idle;
             }
 
-            var timeInAttack = CalculateAttackTime() - (AttackTimer - timingMilliseconds);
-            LastActionTime = Timing.Global.Milliseconds;
-
-            if (AnimatedTextures.TryGetValue(SpriteAnimations.Attack, out _))
+            if (IsMoving && !IsAttacking && isNotBlockingAndCasting)
             {
-                SpriteAnimation = SpriteAnimations.Attack;
+                SpriteAnimation = SpriteAnimations.Normal;
+                LastActionTime = timingMilliseconds;
             }
 
-            if (Options.WeaponIndex > -1 && Options.WeaponIndex < Equipment.Length)
+            if (IsAttacking && isNotBlockingAndCasting)
             {
-                if (Equipment[Options.WeaponIndex] != Guid.Empty && this != Globals.Me ||
-                    MyEquipment[Options.WeaponIndex] < Options.MaxInvItems)
+                // Normal sprite-sheets has their own handler for attacking frames.
+                if (AnimatedTextures.TryGetValue(SpriteAnimations.Normal, out _))
                 {
-                    var itemId = Guid.Empty;
-                    if (this == Globals.Me)
-                    {
-                        var slot = MyEquipment[Options.WeaponIndex];
-                        if (slot > -1)
-                        {
-                            itemId = Inventory[slot].ItemId;
-                        }
-                    }
-                    else
-                    {
-                        itemId = Equipment[Options.WeaponIndex];
-                    }
+                    return;
+                }
 
-                    var item = ItemBase.Get(itemId);
-                    if (item != null)
+                var timeInAttack = CalculateAttackTime() - (AttackTimer - timingMilliseconds);
+                LastActionTime = Timing.Global.Milliseconds;
+
+                if (AnimatedTextures.TryGetValue(SpriteAnimations.Attack, out _))
+                {
+                    SpriteAnimation = SpriteAnimations.Attack;
+                }
+
+                if (Options.WeaponIndex > -1 && Options.WeaponIndex < Equipment.Length)
+                {
+                    if (Equipment[Options.WeaponIndex] != Guid.Empty && this != Globals.Me ||
+                        MyEquipment[Options.WeaponIndex] < Options.MaxInvItems)
                     {
-                        if (AnimatedTextures.TryGetValue(SpriteAnimations.Weapon, out _))
+                        var itemId = Guid.Empty;
+                        if (this == Globals.Me)
                         {
-                            SpriteAnimation = SpriteAnimations.Weapon;
+                            var slot = MyEquipment[Options.WeaponIndex];
+                            if (slot > -1)
+                            {
+                                itemId = Inventory[slot].ItemId;
+                            }
+                        }
+                        else
+                        {
+                            itemId = Equipment[Options.WeaponIndex];
                         }
 
-                        if (AnimatedTextures.TryGetValue(SpriteAnimations.Shoot, out _) &&
-                            item.ProjectileId != Guid.Empty &&
-                            item.WeaponSpriteOverride == null)
+                        var item = ItemBase.Get(itemId);
+                        if (item != null)
                         {
-                            SpriteAnimation = SpriteAnimations.Shoot;
+                            if (AnimatedTextures.TryGetValue(SpriteAnimations.Weapon, out _))
+                            {
+                                SpriteAnimation = SpriteAnimations.Weapon;
+                            }
+
+                            if (AnimatedTextures.TryGetValue(SpriteAnimations.Shoot, out _) &&
+                                item.ProjectileId != Guid.Empty &&
+                                item.WeaponSpriteOverride == null)
+                            {
+                                SpriteAnimation = SpriteAnimations.Shoot;
+                            }
                         }
                     }
                 }
-            }
 
-            switch (SpriteAnimation)
-            {
-                case SpriteAnimations.Cast:
-                case SpriteAnimations.Idle:
-                case SpriteAnimations.Normal:
-                    break;
-                case SpriteAnimations.Attack:
-                case SpriteAnimations.Shoot:
-                case SpriteAnimations.Weapon:
-                default:
-                    SpriteFrame = (int)Math.Floor(timeInAttack / (CalculateAttackTime() / (float)SpriteFrames));
-                    break;
+                switch (SpriteAnimation)
+                {
+                    case SpriteAnimations.Cast:
+                    case SpriteAnimations.Idle:
+                    case SpriteAnimations.Normal:
+                        break;
+                    case SpriteAnimations.Attack:
+                    case SpriteAnimations.Shoot:
+                    case SpriteAnimations.Weapon:
+                    default:
+                        SpriteFrame = (int)Math.Floor(timeInAttack / (CalculateAttackTime() / (float)SpriteFrames));
+                        break;
+                }
             }
         }
+        else
+        {
+            if (SpriteFrameTimer + Options.Instance.Sprites.IdleFrameDuration < timingMilliseconds)
+            {
+                switch (FishingStage)
+                {
+                    case 0:
+                        if (oldFishingStage == 1)
+                        {
+                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. РЎР±РѕСЂ СѓРґРѕС‡РєРё");
+                            if (AnimatedTextures.TryGetValue(SpriteAnimations.FishingUse, out _))
+                            {
+                                SpriteAnimation = SpriteAnimations.FishingUse;
+                                SpriteFrame = SpriteFrames - 1;
+                            }
+                            oldFishingStage = 0;
+                        }
+                        else if (oldFishingStage == 0)
+                        {
+                            SpriteFrame--;
+                            if (SpriteFrame < 0)
+                            {
+                                if (AnimatedTextures.TryGetValue(SpriteAnimations.Idle, out _))
+                                    SpriteAnimation = SpriteAnimations.Idle;
+                                SpriteFrame = 0;
+                            }
+                        }
+                        else oldFishingStage = FishingStage;
 
+                        break;
+                    case 1:
+                        if (oldFishingStage == 0)
+                        {
+                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. Р‘СЂРѕСЃРѕРє СѓРґРѕС‡РєРё");
+                            if (AnimatedTextures.TryGetValue(SpriteAnimations.FishingUse, out _))
+                            {
+                                SpriteAnimation = SpriteAnimations.FishingUse;
+                                SpriteFrame = 0;
+                            }
+                            oldFishingStage = FishingStage;
+                        }
+                        else if (oldFishingStage == 1)
+                        {
+                            SpriteFrame++;
+                            if (SpriteFrame >= SpriteFrames)
+                            {
+                                if (AnimatedTextures.TryGetValue(SpriteAnimations.FishingIdle, out _))
+                                {
+                                    SpriteAnimation = SpriteAnimations.FishingIdle;
+                                    SpriteFrame = 1;
+                                }
+                            }
+                        }
+
+                        break;
+                    case 2:
+                        if (oldFishingStage == 1)
+                        {
+                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. Р¦РёРєР». Р°РЅРёРјР°С†РёСЏ");
+                            if (AnimatedTextures.TryGetValue(SpriteAnimations.FishingFight, out _))
+                            {
+                                SpriteAnimation = SpriteAnimations.FishingFight;
+                            }
+                            oldFishingStage = FishingStage;
+                        }
+                        SpriteFrame = IsFishingRodPressed ? 0 : 1;
+                        break;
+                    case 3:
+                        if (oldFishingStage == 2)
+                        {
+                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. РЎР±РѕСЂ СѓРґРѕС‡РєРё СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј");
+                            if (AnimatedTextures.TryGetValue(SpriteAnimations.FishingUse, out _))
+                            {
+                                SpriteAnimation = SpriteAnimations.FishingUse;
+                                SpriteFrame = SpriteFrames - 1;
+                            }
+                            oldFishingStage = FishingStage;
+                        }
+                        else if (oldFishingStage == 3)
+                        {
+                            SpriteFrame--;
+                            if (SpriteFrame < 0)
+                            {
+                                if (AnimatedTextures.TryGetValue(SpriteAnimations.Idle, out _))
+                                {
+                                    SpriteAnimation = SpriteAnimations.Idle;
+                                    SpriteFrame = 0;
+                                }
+                                oldFishingStage = 0;
+                            }
+                        }
+
+                        break;
+                }
+                SpriteFrameTimer = timingMilliseconds;
+            }
+        }
+        
         if (IsCasting)
         {
             var spell = SpellBase.Get(SpellCast);
@@ -2126,6 +2272,10 @@ public partial class Entity : IEntity
 
                 break;
 
+            case SpriteAnimations.FishingIdle:
+            case SpriteAnimations.FishingUse:
+            case SpriteAnimations.FishingFight:
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(spriteAnimation));
         }
@@ -2385,7 +2535,9 @@ public partial class Entity : IEntity
             {
                 if (gameMap.Attributes[tmpX, tmpY] != null)
                 {
-                    if (gameMap.Attributes[tmpX, tmpY].Type == MapAttribute.Blocked || (gameMap.Attributes[tmpX, tmpY].Type == MapAttribute.Animation && ((MapAnimationAttribute)gameMap.Attributes[tmpX, tmpY]).IsBlock))
+                    if (gameMap.Attributes[tmpX, tmpY].Type == MapAttribute.Blocked || 
+                        (gameMap.Attributes[tmpX, tmpY].Type == MapAttribute.Animation && ((MapAnimationAttribute)gameMap.Attributes[tmpX, tmpY]).IsBlock)||
+                        (gameMap.Attributes[tmpX, tmpY].Type == MapAttribute.FishingSpot && ((MapFishingSpotAttribute)gameMap.Attributes[tmpX, tmpY]).IsBlocked))
                     {
                         return -2;
                     }

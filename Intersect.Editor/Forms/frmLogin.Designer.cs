@@ -33,161 +33,170 @@ namespace Intersect.Editor.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmLogin));
-            this.lblStatus = new System.Windows.Forms.Label();
-            this.tmrSocket = new System.Windows.Forms.Timer(this.components);
-            this.txtUsername = new DarkUI.Controls.DarkTextBox();
-            this.txtPassword = new DarkUI.Controls.DarkTextBox();
-            this.btnLogin = new DarkUI.Controls.DarkButton();
-            this.picLogo = new System.Windows.Forms.PictureBox();
-            this.lblVersion = new System.Windows.Forms.Label();
-            this.lblUsername = new System.Windows.Forms.Label();
-            this.lblPassword = new System.Windows.Forms.Label();
-            this.lblGettingStarted = new System.Windows.Forms.Label();
-            this.chkRemember = new DarkUI.Controls.DarkCheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
-            this.SuspendLayout();
-            //
+            components = new Container();
+            var resources = new ComponentResourceManager(typeof(FrmLogin));
+            lblStatus = new Label();
+            tmrSocket = new Timer(components);
+            txtUsername = new DarkTextBox();
+            txtPassword = new DarkTextBox();
+            btnLogin = new DarkButton();
+            picLogo = new PictureBox();
+            lblVersion = new Label();
+            lblUsername = new Label();
+            lblPassword = new Label();
+            lblGettingStarted = new Label();
+            chkRemember = new DarkCheckBox();
+            ((ISupportInitialize)picLogo).BeginInit();
+            SuspendLayout();
+            // 
             // lblStatus
-            //
-            this.lblStatus.ForeColor = System.Drawing.Color.White;
-            this.lblStatus.Location = new System.Drawing.Point(12, 313);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(501, 23);
-            this.lblStatus.TabIndex = 0;
-            this.lblStatus.Text = "Connecting to server, please wait...";
-            this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            //
+            // 
+            lblStatus.ForeColor = System.Drawing.Color.White;
+            lblStatus.Location = new System.Drawing.Point(14, 361);
+            lblStatus.Margin = new Padding(4, 0, 4, 0);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(584, 27);
+            lblStatus.TabIndex = 0;
+            lblStatus.Text = "Connecting to server, please wait...";
+            lblStatus.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // tmrSocket
-            //
-            this.tmrSocket.Enabled = true;
-            this.tmrSocket.Tick += new System.EventHandler(this.tmrSocket_Tick);
-            //
+            // 
+            tmrSocket.Enabled = true;
+            tmrSocket.Tick += tmrSocket_Tick;
+            // 
             // txtUsername
-            //
-            this.txtUsername.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtUsername.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtUsername.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtUsername.Location = new System.Drawing.Point(482, 210);
-            this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(127, 20);
-            this.txtUsername.TabIndex = 1;
-            this.txtUsername.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtUsername_KeyDown);
-            //
+            // 
+            txtUsername.BackColor = System.Drawing.Color.FromArgb(69, 73, 74);
+            txtUsername.BorderStyle = BorderStyle.FixedSingle;
+            txtUsername.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            txtUsername.Location = new System.Drawing.Point(562, 242);
+            txtUsername.Margin = new Padding(4, 3, 4, 3);
+            txtUsername.Name = "txtUsername";
+            txtUsername.Size = new Size(148, 23);
+            txtUsername.TabIndex = 1;
+            txtUsername.KeyDown += txtUsername_KeyDown;
+            // 
             // txtPassword
-            //
-            this.txtPassword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtPassword.Location = new System.Drawing.Point(482, 236);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(127, 20);
-            this.txtPassword.TabIndex = 2;
-            this.txtPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPassword_KeyDown);
-            //
+            // 
+            txtPassword.BackColor = System.Drawing.Color.FromArgb(69, 73, 74);
+            txtPassword.BorderStyle = BorderStyle.FixedSingle;
+            txtPassword.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            txtPassword.Location = new System.Drawing.Point(562, 272);
+            txtPassword.Margin = new Padding(4, 3, 4, 3);
+            txtPassword.Name = "txtPassword";
+            txtPassword.PasswordChar = '*';
+            txtPassword.Size = new Size(148, 23);
+            txtPassword.TabIndex = 2;
+            txtPassword.KeyDown += txtPassword_KeyDown;
+            // 
             // btnLogin
-            //
-            this.btnLogin.Location = new System.Drawing.Point(534, 283);
-            this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Padding = new System.Windows.Forms.Padding(5);
-            this.btnLogin.Size = new System.Drawing.Size(75, 23);
-            this.btnLogin.TabIndex = 4;
-            this.btnLogin.Text = "Login";
-            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
-            //
+            // 
+            btnLogin.Location = new System.Drawing.Point(623, 327);
+            btnLogin.Margin = new Padding(4, 3, 4, 3);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Padding = new Padding(6, 6, 6, 6);
+            btnLogin.Size = new Size(88, 27);
+            btnLogin.TabIndex = 4;
+            btnLogin.Text = "Login";
+            btnLogin.Click += btnLogin_Click;
+            // 
             // picLogo
-            //
-            this.picLogo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("picLogo.BackgroundImage")));
-            this.picLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.picLogo.Location = new System.Drawing.Point(32, 22);
-            this.picLogo.Name = "picLogo";
-            this.picLogo.Size = new System.Drawing.Size(580, 160);
-            this.picLogo.TabIndex = 4;
-            this.picLogo.TabStop = false;
-            //
+            // 
+            picLogo.BackgroundImage = (Image)resources.GetObject("picLogo.BackgroundImage");
+            picLogo.BackgroundImageLayout = ImageLayout.Stretch;
+            picLogo.Location = new System.Drawing.Point(37, 25);
+            picLogo.Margin = new Padding(4, 3, 4, 3);
+            picLogo.Name = "picLogo";
+            picLogo.Size = new Size(677, 185);
+            picLogo.TabIndex = 4;
+            picLogo.TabStop = false;
+            // 
             // lblVersion
-            //
-            this.lblVersion.BackColor = System.Drawing.Color.Transparent;
-            this.lblVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lblVersion.Location = new System.Drawing.Point(372, 319);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(257, 20);
-            this.lblVersion.TabIndex = 5;
-            this.lblVersion.Text = "Editor v1.0.0.0";
-            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            //
+            // 
+            lblVersion.BackColor = System.Drawing.Color.Transparent;
+            lblVersion.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            lblVersion.ForeColor = System.Drawing.Color.Gainsboro;
+            lblVersion.Location = new System.Drawing.Point(434, 368);
+            lblVersion.Margin = new Padding(4, 0, 4, 0);
+            lblVersion.Name = "lblVersion";
+            lblVersion.Size = new Size(300, 23);
+            lblVersion.TabIndex = 5;
+            lblVersion.Text = "Editor v1.0.0.0";
+            lblVersion.TextAlign = ContentAlignment.MiddleRight;
+            // 
             // lblUsername
-            //
-            this.lblUsername.AutoSize = true;
-            this.lblUsername.ForeColor = System.Drawing.Color.White;
-            this.lblUsername.Location = new System.Drawing.Point(420, 213);
-            this.lblUsername.Name = "lblUsername";
-            this.lblUsername.Size = new System.Drawing.Size(58, 13);
-            this.lblUsername.TabIndex = 6;
-            this.lblUsername.Text = "Username:";
-            //
+            // 
+            lblUsername.AutoSize = true;
+            lblUsername.ForeColor = System.Drawing.Color.White;
+            lblUsername.Location = new System.Drawing.Point(434, 244);
+            lblUsername.Margin = new Padding(4, 0, 4, 0);
+            lblUsername.Name = "lblUsername";
+            lblUsername.Size = new Size(63, 15);
+            lblUsername.TabIndex = 6;
+            lblUsername.Text = "Username:";
+            // 
             // lblPassword
-            //
-            this.lblPassword.AutoSize = true;
-            this.lblPassword.ForeColor = System.Drawing.Color.White;
-            this.lblPassword.Location = new System.Drawing.Point(420, 239);
-            this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(56, 13);
-            this.lblPassword.TabIndex = 7;
-            this.lblPassword.Text = "Password:";
-            //
+            // 
+            lblPassword.AutoSize = true;
+            lblPassword.ForeColor = System.Drawing.Color.White;
+            lblPassword.Location = new System.Drawing.Point(434, 274);
+            lblPassword.Margin = new Padding(4, 0, 4, 0);
+            lblPassword.Name = "lblPassword";
+            lblPassword.Size = new Size(60, 15);
+            lblPassword.TabIndex = 7;
+            lblPassword.Text = "Password:";
+            // 
             // lblGettingStarted
-            //
-            this.lblGettingStarted.BackColor = System.Drawing.Color.Transparent;
-            this.lblGettingStarted.ForeColor = System.Drawing.Color.White;
-            this.lblGettingStarted.Location = new System.Drawing.Point(12, 204);
-            this.lblGettingStarted.Name = "lblGettingStarted";
-            this.lblGettingStarted.Size = new System.Drawing.Size(363, 58);
-            this.lblGettingStarted.TabIndex = 8;
-            this.lblGettingStarted.Text = "Getting Started?\r\n1. Start the Intersect Server\r\n2. Open the Intersect Client & C" +
-    "reate an Account\r\n3. Login to that account here to start designing your game!";
-            //
+            // 
+            lblGettingStarted.BackColor = System.Drawing.Color.Transparent;
+            lblGettingStarted.ForeColor = System.Drawing.Color.White;
+            lblGettingStarted.Location = new System.Drawing.Point(14, 235);
+            lblGettingStarted.Margin = new Padding(4, 0, 4, 0);
+            lblGettingStarted.Name = "lblGettingStarted";
+            lblGettingStarted.Size = new Size(424, 67);
+            lblGettingStarted.TabIndex = 8;
+            lblGettingStarted.Text = "Getting Started?\r\n1. Start the Intersect Server\r\n2. Open the Intersect Client & Create an Account\r\n3. Login to that account here to start designing your game!";
+            // 
             // chkRemember
-            //
-            this.chkRemember.AutoSize = true;
-            this.chkRemember.ForeColor = System.Drawing.Color.White;
-            this.chkRemember.Location = new System.Drawing.Point(482, 261);
-            this.chkRemember.Name = "chkRemember";
-            this.chkRemember.Size = new System.Drawing.Size(95, 17);
-            this.chkRemember.TabIndex = 3;
-            this.chkRemember.Text = "Remember Me";
-            //
+            // 
+            chkRemember.AutoSize = true;
+            chkRemember.ForeColor = System.Drawing.Color.White;
+            chkRemember.Location = new System.Drawing.Point(562, 301);
+            chkRemember.Margin = new Padding(4, 3, 4, 3);
+            chkRemember.Name = "chkRemember";
+            chkRemember.Size = new Size(104, 19);
+            chkRemember.TabIndex = 3;
+            chkRemember.Text = "Remember Me";
+            // 
             // FrmLogin
-            //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(628, 338);
-            this.Controls.Add(this.chkRemember);
-            this.Controls.Add(this.lblGettingStarted);
-            this.Controls.Add(this.lblPassword);
-            this.Controls.Add(this.lblUsername);
-            this.Controls.Add(this.lblVersion);
-            this.Controls.Add(this.picLogo);
-            this.Controls.Add(this.btnLogin);
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.txtUsername);
-            this.Controls.Add(this.lblStatus);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.KeyPreview = true;
-            this.MaximizeBox = false;
-            this.Name = "FrmLogin";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Intersect Editor Login";
-            this.Load += new System.EventHandler(this.frmLogin_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmLogin_KeyDown);
-            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
+            ClientSize = new Size(733, 390);
+            Controls.Add(chkRemember);
+            Controls.Add(lblGettingStarted);
+            Controls.Add(lblPassword);
+            Controls.Add(lblUsername);
+            Controls.Add(lblVersion);
+            Controls.Add(picLogo);
+            Controls.Add(btnLogin);
+            Controls.Add(txtPassword);
+            Controls.Add(txtUsername);
+            Controls.Add(lblStatus);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            KeyPreview = true;
+            Margin = new Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            Name = "FrmLogin";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Intersect Editor Login";
+            Load += frmLogin_Load;
+            KeyDown += FrmLogin_KeyDown;
+            ((ISupportInitialize)picLogo).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

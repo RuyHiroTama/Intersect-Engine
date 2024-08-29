@@ -39,7 +39,7 @@ public partial class FrmMapLayers : DockContent
 
     public LayerTabs CurrentTab = LayerTabs.Tiles;
 
-    public Dictionary<string, bool> LayerVisibility = new Dictionary<string,bool>();
+    public Dictionary<string, bool> LayerVisibility = new Dictionary<string, bool>();
 
     //MonoGame Swap Chain
     private SwapChainRenderTarget mChain;
@@ -70,7 +70,7 @@ public partial class FrmMapLayers : DockContent
 
         // Selected Npc highlight color from preferences
         NpcPulseColor = ColorTranslator.FromHtml(Preferences.LoadPreference("NpcPulseColor"));
-        
+
         //See if we can use the old style icons instead of a combobox
         if (Options.Instance.MapOpts.Layers.All.Count <= mMapLayers.Count)
         {
@@ -93,7 +93,7 @@ public partial class FrmMapLayers : DockContent
         }
         else
         {
-            foreach(var layer in mMapLayers)
+            foreach (var layer in mMapLayers)
             {
                 layer.Hide();
             }
@@ -144,8 +144,8 @@ public partial class FrmMapLayers : DockContent
         }
 
         mTMouseDown = true;
-        Globals.CurSelX = (int) Math.Floor((double) e.X / Options.TileWidth);
-        Globals.CurSelY = (int) Math.Floor((double) e.Y / Options.TileHeight);
+        Globals.CurSelX = (int)Math.Floor((double)e.X / Options.TileWidth);
+        Globals.CurSelY = (int)Math.Floor((double)e.Y / Options.TileHeight);
         Globals.CurSelW = 0;
         Globals.CurSelH = 0;
         if (Globals.CurSelX < 0)
@@ -203,8 +203,8 @@ public partial class FrmMapLayers : DockContent
 
         if (mTMouseDown && Globals.Autotilemode == 0)
         {
-            var tmpX = (int) Math.Floor((double) e.X / Options.TileWidth);
-            var tmpY = (int) Math.Floor((double) e.Y / Options.TileHeight);
+            var tmpX = (int)Math.Floor((double)e.X / Options.TileWidth);
+            var tmpY = (int)Math.Floor((double)e.Y / Options.TileHeight);
             Globals.CurSelW = tmpX - Globals.CurSelX;
             Globals.CurSelH = tmpY - Globals.CurSelY;
         }
@@ -305,7 +305,7 @@ public partial class FrmMapLayers : DockContent
                 Globals.MapLayersWindow.cmbTilesets.SelectedIndex = 0;
             }
 
-            Globals.CurrentTileset = (TilesetBase) TilesetBase.Lookup.Values.ToArray()[0];
+            Globals.CurrentTileset = (TilesetBase)TilesetBase.Lookup.Values.ToArray()[0];
         }
     }
 
@@ -462,6 +462,7 @@ public partial class FrmMapLayers : DockContent
         grpAnimation.Visible = false;
         grpSlide.Visible = false;
         grpCritter.Visible = false;
+        grpFishingSpot.Visible = false;
     }
 
     private void rbItem_CheckedChanged(object sender, EventArgs e)
@@ -543,6 +544,20 @@ public partial class FrmMapLayers : DockContent
         grpResource.Visible = true;
     }
 
+    private void rbFishingSpot_CheckedChanged(object sender, EventArgs e)
+    {
+        cmbSpotTypeSelect.Items.Clear();
+        cmbSpotTypeSelect.Items.AddRange(FishingSpotBase.Names);
+        if (cmbSpotTypeSelect.Items.Count > 0)
+        {
+            cmbSpotTypeSelect.SelectedIndex = 0;
+        }
+
+        if (!rbFishingSpot.Checked) return;
+        HideAttributeMenus();
+        grpFishingSpot.Visible = true;
+    }
+
     // Used for returning an integer value depending on which radio button is selected on the forms. This is merely used to make PlaceAtrribute less messy.
     private byte GetEditorDimensionGateway()
     {
@@ -576,50 +591,53 @@ public partial class FrmMapLayers : DockContent
     {
         if (rbBlocked.Checked == true)
         {
-            return (int) MapAttribute.Blocked;
+            return (int)MapAttribute.Blocked;
         }
         else if (rbItem.Checked == true)
         {
-            return (int) MapAttribute.Item;
+            return (int)MapAttribute.Item;
         }
         else if (rbZDimension.Checked == true)
         {
-            return (int) MapAttribute.ZDimension;
+            return (int)MapAttribute.ZDimension;
         }
         else if (rbNPCAvoid.Checked == true)
         {
-            return (int) MapAttribute.NpcAvoid;
+            return (int)MapAttribute.NpcAvoid;
         }
         else if (rbWarp.Checked == true)
         {
-            return (int) MapAttribute.Warp;
+            return (int)MapAttribute.Warp;
         }
         else if (rbSound.Checked == true)
         {
-            return (int) MapAttribute.Sound;
+            return (int)MapAttribute.Sound;
         }
         else if (rbResource.Checked == true)
         {
-            return (int) MapAttribute.Resource;
+            return (int)MapAttribute.Resource;
         }
         else if (rbAnimation.Checked == true)
         {
-            return (int) MapAttribute.Animation;
+            return (int)MapAttribute.Animation;
         }
         else if (rbGrappleStone.Checked == true)
         {
-            return (int) MapAttribute.GrappleStone;
+            return (int)MapAttribute.GrappleStone;
         }
         else if (rbSlide.Checked == true)
         {
-            return (int) MapAttribute.Slide;
+            return (int)MapAttribute.Slide;
         }
         else if (rbCritter.Checked == true)
         {
-            return (int) MapAttribute.Critter;
+            return (int)MapAttribute.Critter;
         }
-
-        return (int) MapAttribute.Walkable;
+        else if (rbFishingSpot.Checked == true)
+        {
+            return (int)MapAttribute.FishingSpot;
+        }
+        return (int)MapAttribute.Walkable;
     }
 
     private MapAttribute SelectedMapAttributeType
@@ -681,7 +699,12 @@ public partial class FrmMapLayers : DockContent
                 return MapAttribute.Critter;
             }
 
-            return (MapAttribute) byte.MaxValue;
+            if (rbFishingSpot.Checked)
+            {
+                return MapAttribute.FishingSpot;
+            }
+
+            return (MapAttribute)byte.MaxValue;
         }
     }
 
@@ -759,6 +782,13 @@ public partial class FrmMapLayers : DockContent
                 critterAttribute.Direction = (byte)cmbCritterDirection.SelectedIndex;
                 break;
 
+            case MapAttribute.FishingSpot:
+                var fishingSpotAttribute = attribute as MapFishingSpotAttribute;
+
+                fishingSpotAttribute.FishingSpotType = FishingSpotBase.IdFromList(cmbSpotTypeSelect.SelectedIndex);
+                fishingSpotAttribute.IsBlocked = chkBlockedFishingSpot.Checked;
+                break;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(SelectedMapAttributeType), @"The currently selected attribute type has not been fully implemented.");
         }
@@ -816,7 +846,7 @@ public partial class FrmMapLayers : DockContent
             lstMapNpcs.SelectedIndex = 0;
             if (lstMapNpcs.SelectedIndex < Globals.CurrentMap.Spawns.Count)
             {
-                cmbDir.SelectedIndex = (int) Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Direction;
+                cmbDir.SelectedIndex = (int)Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Direction;
                 cmbNpc.SelectedIndex = NpcBase.ListIndex(Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].NpcId);
                 if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
                 {
@@ -888,7 +918,7 @@ public partial class FrmMapLayers : DockContent
     {
         lstMapNpcs_Update();
     }
-    
+
     private void lstMapNpcs_SelectedIndexChanged(object sender, EventArgs e)
     {
         lstMapNpcs_Update();
@@ -922,7 +952,7 @@ public partial class FrmMapLayers : DockContent
             UpdateSpawnLocationLabel();
         }
     }
-    
+
     public void UpdateSpawnLocationLabel()
     {
         grpSpawnLoc.Text = rbDeclared.Checked ? Strings.NpcSpawns.spawndeclared : Strings.NpcSpawns.spawnrandom;
@@ -934,7 +964,7 @@ public partial class FrmMapLayers : DockContent
         if (lstMapNpcs.SelectedIndex >= 0)
         {
             Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Direction =
-                (NpcSpawnDirection) cmbDir.SelectedIndex;
+                (NpcSpawnDirection)cmbDir.SelectedIndex;
         }
     }
 
@@ -966,7 +996,7 @@ public partial class FrmMapLayers : DockContent
     {
         var frmWarpSelection = new FrmWarpSelection();
         frmWarpSelection.SelectTile(
-            MapList.OrderedMaps[cmbWarpMap.SelectedIndex].MapId, (int) nudWarpX.Value, (int) nudWarpY.Value
+            MapList.OrderedMaps[cmbWarpMap.SelectedIndex].MapId, (int)nudWarpX.Value, (int)nudWarpY.Value
         );
 
         frmWarpSelection.ShowDialog();
@@ -1205,6 +1235,10 @@ public partial class FrmMapLayers : DockContent
 
         lblEventInstructions.Text = Strings.MapLayers.eventinstructions;
         lblLightInstructions.Text = Strings.MapLayers.lightinstructions;
+
+        //FishingSpot Groupbox
+        grpFishingSpot.Text = Strings.Attributes.FishingSpot;
+        chkBlockedFishingSpot.Text = Strings.Attributes.FishingSpotBlock;
     }
 
     public void InitMapLayers()
@@ -1362,7 +1396,7 @@ public partial class FrmMapLayers : DockContent
         }
         else
         {
-            ToggleLayerVisibility(mMapLayers.IndexOf((PictureBox) sender));
+            ToggleLayerVisibility(mMapLayers.IndexOf((PictureBox)sender));
         }
     }
 
@@ -1379,7 +1413,7 @@ public partial class FrmMapLayers : DockContent
     private void picMapLayer_MouseHover(object sender, EventArgs e)
     {
         var tt = new ToolTip();
-        tt.SetToolTip((PictureBox) sender, Options.Instance.MapOpts.Layers.All[mMapLayers.IndexOf((PictureBox)sender)]);
+        tt.SetToolTip((PictureBox)sender, Options.Instance.MapOpts.Layers.All[mMapLayers.IndexOf((PictureBox)sender)]);
     }
 
     private void cmbTilesets_MouseDown(object sender, MouseEventArgs e)

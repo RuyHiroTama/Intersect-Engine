@@ -117,6 +117,11 @@ public static partial class PacketSender
         Network.SendPacket(new AttackPacket(targetId));
     }
 
+    public static void SendFishing(Guid Id, bool isFishing, int stage, bool isPressed)
+    {
+        Network.SendPacket(new FishingPacket(Id, isFishing, stage, isPressed));
+    }
+
     public static void SendBlock(bool blocking)
     {
         Network.SendPacket(new BlockPacket(blocking));
@@ -516,4 +521,23 @@ public static partial class PacketSender
         Network.SendPacket(new TargetPacket(targetId));
     }
 
+    //Отправить место рыбалки
+    public static void SendFishingSpot(Guid fishingSpotID)
+    {
+        Network.SendPacket(new SendFishingSpot(fishingSpotID));
+    }
+    //Отменить рыбалку
+    public static void SendCanselFishing()
+    {
+        Network.SendPacket(new SendCancelFishing());
+    }
+
+    public static void SendSuccessFishing()
+    {
+        Network.SendPacket(new SendSuccessFishing());
+    }
+    public static void SendFailedFishing()
+    {
+        Network.SendPacket(new SendFailedFishing());
+    }
 }

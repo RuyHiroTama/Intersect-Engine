@@ -227,16 +227,26 @@ public partial class Player : Entity, IPlayer
     public bool IsInMyGuild(IPlayer player) => IsInGuild && player != null && player.GuildName == Guild;
 
     public bool IsBusy => !(Globals.EventHolds.Count == 0 &&
-                 !Globals.MoveRouteActive &&
-                 Globals.GameShop == null &&
-                 Globals.InBank == false &&
-                 Globals.InCraft == false &&
-                 Globals.InTrade == false &&
-                 !Interface.Interface.HasInputFocus());
+                !Globals.MoveRouteActive &&
+                Globals.GameShop == null &&
+                Globals.InBank == false &&
+                Globals.InCraft == false &&
+                Globals.InTrade == false &&
+                Globals.InFishing == false &&
+                !Interface.Interface.HasInputFocus());
+
+    public FishEventClient fishEvent;
 
     public override bool Update()
     {
-
+        if (fishEvent == null || fishEvent == default)
+        {
+            fishEvent = new FishEventClient();
+        }
+        if (fishEvent != null && fishEvent != default)
+        {
+            fishEvent.Update();
+        }
         if (Globals.Me == this)
         {
             HandleInput();
@@ -251,7 +261,11 @@ public partial class Player : Entity, IPlayer
 
             if (Controls.KeyDown(Control.AttackInteract))
             {
-                if (IsCasting)
+                if (Globals.Me.fishEvent.TryFishing())
+                {
+
+                }
+                else if (IsCasting)
                 {
                     if (IsCastingCheckTimer < Timing.Global.Milliseconds &&
                         Options.Combat.EnableCombatChatMessages)

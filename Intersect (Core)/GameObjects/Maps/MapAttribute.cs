@@ -40,6 +40,8 @@ public abstract partial class MapAttribute
                 return new MapSlideAttribute();
             case Enums.MapAttribute.Critter:
                 return new MapCritterAttribute();
+            case Enums.MapAttribute.FishingSpot:
+                return new MapFishingSpotAttribute();
         }
 
         return null;
@@ -319,6 +321,26 @@ public partial class MapCritterAttribute : MapAttribute
         att.Layer = Layer;
         att.IgnoreNpcAvoids = IgnoreNpcAvoids;
 
+        return att;
+    }
+}
+
+public partial class MapFishingSpotAttribute : MapAttribute
+{
+    public override Enums.MapAttribute Type => Enums.MapAttribute.FishingSpot;
+
+    [EditorLabel("Attributes", "FishingSpotType")]
+    public Guid FishingSpotType { get; set; }
+
+    [EditorLabel("Attributes", "FishingSpotBlock")]
+    [EditorBoolean(Style = BooleanStyle.YesNo)]
+    public bool IsBlocked { get; set; }
+
+    public override MapAttribute Clone()
+    {
+        var att = (MapFishingSpotAttribute)base.Clone();
+        att.FishingSpotType = FishingSpotType;
+        att.IsBlocked = IsBlocked;
         return att;
     }
 }

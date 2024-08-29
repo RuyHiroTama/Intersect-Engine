@@ -588,6 +588,7 @@ public abstract partial class Entity : IDisposable
         {
             case MapBlockedAttribute _:
             case MapAnimationAttribute animationAttribute when animationAttribute.IsBlock:
+            case MapFishingSpotAttribute fishingSpot when fishingSpot.IsBlocked:
             case MapNpcAvoidAttribute _ when !IgnoresNpcAvoid:
                 blockerType = MovementBlockerType.MapAttribute;
                 break;
