@@ -61,7 +61,7 @@ public partial class MapSound : Sound, IMapSound
         return false;
     }
 
-    private float mVolumeLocalMultiple;
+    private float mVolumeLocalMultiple = 1;
     public float Volume
     {
         get => mVolumeLocalMultiple;

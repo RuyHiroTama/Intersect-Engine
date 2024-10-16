@@ -1376,10 +1376,10 @@ public partial class Entity : IEntity
             // If custom paperdoll texture exists, use it.
             if (customPaperdollTex != null)
             {
-                Log.Debug($"Ожидается для предмета файл = {filenameNoExt}_{customAnimationName}.png");
+                Log.Debug($"???y ? ????? = {filenameNoExt}_{customAnimationName}.png");
                 paperdollTex = customPaperdollTex;
             }
-            else Log.Debug($"Нет файла = {filenameNoExt}_{customAnimationName}.png");
+            else Log.Debug($"???? = {filenameNoExt}_{customAnimationName}.png");
         }
 
         // If there's no custom paperdoll: use the paperdoll texture based on the SpriteAnimation.
@@ -1936,7 +1936,8 @@ public partial class Entity : IEntity
     public int oldFishingStage = 0;
     public bool IsFishingRodPressed = false;
     private long FishAnimationTime;
-
+    public SpriteAnimations oldAnimationType = SpriteAnimations.Normal;
+    public SpriteAnimations prevAnimationType = SpriteAnimations.Normal;
     private void UpdateSpriteAnimation()
     {
         //Exit if textures haven't been loaded yet
@@ -1950,6 +1951,7 @@ public partial class Entity : IEntity
 
         if (!isFishing)
         {
+            //?u?? ???
             SpriteAnimation = SpriteAnimations.Normal;
             if (AnimatedTextures.TryGetValue(SpriteAnimations.Idle, out _) &&
                 LastActionTime + Options.Instance.Sprites.IdleStartDelay < timingMilliseconds &&
@@ -2032,7 +2034,7 @@ public partial class Entity : IEntity
                 }
             }
         }
-        else
+        else//л??
         {
             if (SpriteFrameTimer + Options.Instance.Sprites.IdleFrameDuration < timingMilliseconds)
             {
@@ -2041,7 +2043,7 @@ public partial class Entity : IEntity
                     case 0:
                         if (oldFishingStage == 1)
                         {
-                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. РЎР±РѕСЂ СѓРґРѕС‡РєРё");
+                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. Сбор удочки");
                             if (AnimatedTextures.TryGetValue(SpriteAnimations.FishingUse, out _))
                             {
                                 SpriteAnimation = SpriteAnimations.FishingUse;
@@ -2065,7 +2067,7 @@ public partial class Entity : IEntity
                     case 1:
                         if (oldFishingStage == 0)
                         {
-                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. Р‘СЂРѕСЃРѕРє СѓРґРѕС‡РєРё");
+                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. Бросок удочки");
                             if (AnimatedTextures.TryGetValue(SpriteAnimations.FishingUse, out _))
                             {
                                 SpriteAnimation = SpriteAnimations.FishingUse;
@@ -2090,7 +2092,7 @@ public partial class Entity : IEntity
                     case 2:
                         if (oldFishingStage == 1)
                         {
-                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. Р¦РёРєР». Р°РЅРёРјР°С†РёСЏ");
+                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. Цикл. анимация");
                             if (AnimatedTextures.TryGetValue(SpriteAnimations.FishingFight, out _))
                             {
                                 SpriteAnimation = SpriteAnimations.FishingFight;
@@ -2102,7 +2104,7 @@ public partial class Entity : IEntity
                     case 3:
                         if (oldFishingStage == 2)
                         {
-                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. РЎР±РѕСЂ СѓРґРѕС‡РєРё СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј");
+                            //Log.Debug($"Animations Stage: {oldFishingStage}->{FishingStage}. Сбор удочки с результатом");
                             if (AnimatedTextures.TryGetValue(SpriteAnimations.FishingUse, out _))
                             {
                                 SpriteAnimation = SpriteAnimations.FishingUse;
@@ -2176,6 +2178,11 @@ public partial class Entity : IEntity
 
                 SpriteFrameTimer = timingMilliseconds;
             }
+        }
+        if (oldAnimationType != SpriteAnimation)
+        {
+            prevAnimationType = oldAnimationType;
+            oldAnimationType = SpriteAnimation;
         }
     }
 

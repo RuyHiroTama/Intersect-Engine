@@ -1,3 +1,4 @@
+using System.Xml.Linq;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Gwen.Input;
 
@@ -25,7 +26,7 @@ public partial class MultilineTextBox : Label
     ///     Initializes a new instance of the <see cref="TextBox" /> class.
     /// </summary>
     /// <param name="parent">Parent control.</param>
-    public MultilineTextBox(Base parent) : base(parent)
+    public MultilineTextBox(Base parent, string name = "") : base(parent, name)
     {
         AutoSizeToContents = false;
         SetSize(200, 20);

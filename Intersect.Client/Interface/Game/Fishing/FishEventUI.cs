@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Numerics;
+using CommandLine.Text;
 using Intersect.Client.Core;
 using Intersect.Client.Core.Controls;
 using Intersect.Client.Framework.File_Management;
@@ -34,6 +36,9 @@ namespace Intersect.Client.Interface.Game.MiniEvent
         private ImagePanel ItemViewer;
         private ImagePanel Failed;
         private Label SuccessText;
+
+        public RichLabel Information;
+
         //private Label FailedText;
 
         public FishEventUI()
@@ -78,7 +83,7 @@ namespace Intersect.Client.Interface.Game.MiniEvent
             fishEventPanel.TextureFilename = "fish_background.png";
             #endregion
 
-            #region œÓÁËˆËˇ ˚·ÍË
+            #region –ü–æ–∑–∏—Ü–∏—è —Ä—ã–±–∫–∏
 
             #region MoveRange
             rangeMoveFrame = new ImagePanel(fishEventPanel, "MoveRange");
@@ -135,7 +140,7 @@ namespace Intersect.Client.Interface.Game.MiniEvent
             rangeMoveFiller.TextureFilename = "fish_filler.png";
             #endregion
 
-            #region  ˛˜ÓÍ
+            #region –ö—Ä—é—á–æ–∫
             playerHook = new ImagePanel(rangeMoveFrame, "MoveForce");
             playerHook.SetBounds(208, 0, 48, 48);
             playerHook.Padding = new Framework.Gwen.Padding(0, 0, 0, 0);
@@ -156,7 +161,7 @@ namespace Intersect.Client.Interface.Game.MiniEvent
 
             #endregion
 
-            #region œÓ„ÂÒÒ
+            #region –ü—Ä–æ–≥—Ä–µ—Å—Å
 
             #region ProgressBar
             progressBarFrame = new ImagePanel(fishEventPanel, "ProgressBarFrame");
@@ -292,7 +297,10 @@ namespace Intersect.Client.Interface.Game.MiniEvent
             Failed.TextureFilename = "smallbutton_clicked.png";
             #endregion
 
-            
+
+            Information = new Intersect.Client.Framework.Gwen.Control.RichLabel(root,"Information");
+
+
             root.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             Hide();
         }
@@ -305,10 +313,13 @@ namespace Intersect.Client.Interface.Game.MiniEvent
             playerHook.Show();
             progressBarFrame.Show();
             fishEventPanel.Show();
+            Information.Show();
         }
         public void Hide()
         {
-            root.Hide();
+            //root.Hide();
+            //root.Show();
+            //Information.Show();
         }
         public void HideBars(){
             rangeMoveFrame.Hide();
