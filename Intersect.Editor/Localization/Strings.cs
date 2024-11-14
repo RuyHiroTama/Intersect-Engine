@@ -2206,6 +2206,10 @@ Tick timer saved in server config.json.";
         public static LocalizedString gotolabel = @"Go to Label {00}";
 
         public static LocalizedString hidepicture = @"Hide Picture";
+        
+        public static LocalizedString opensteamitemstore = @"Open Steam Item Store";
+        
+        public static LocalizedString steamitemclaim = @"Steam Item Claim";
 
         public static LocalizedString hideplayer = @"Hide Player";
 
@@ -2467,6 +2471,9 @@ Tick timer saved in server config.json.";
             {"giveexperience", @"Give Experience"},
             {"gotolabel", @"Go To Label"},
             {"hidepicture", @"Hide Picture"},
+            {"steam", @"Steam"},
+            {"opensteamitemstore", @"Open Steam Item Store"},
+            {"steamitemclaim", @"Steam Item Claim"},
             {"holdplayer", @"Hold Player"},
             {"label", @"Label"},
             {"levelup", @"Level Up"},

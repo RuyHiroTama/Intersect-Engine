@@ -238,6 +238,9 @@ public enum EventCommandType
     CastSpellOn,
 
     Fade,
+    
+    OpenSteamItemStore = 60,
+    SteamItemClaim,
 }
 
 public enum FadeType

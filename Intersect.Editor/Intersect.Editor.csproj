@@ -5,7 +5,6 @@
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <OutputType>WinExe</OutputType>
-    <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <SelfContained>true</SelfContained>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -15,6 +14,10 @@
     <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
+    <PublishSingleFile>true</PublishSingleFile>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <PackageId>AscensionGameDev.Intersect.Editor</PackageId>
     <Description>Game Editor - Part of the Intersect 2D Game Creation Suite</Description>

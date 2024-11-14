@@ -1301,6 +1301,24 @@ public static partial class Strings
         public readonly LocalizedString Initialized = @"UPnP Service Initialization Succeeded.";
     }
 
+    public sealed partial class SteamNamespace : LocaleNamespace
+    {
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public readonly LocalizedString ItemsClaimedSuccess = @"You have successfully claimed the items.";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public readonly LocalizedString ItemsClaimedFailed = @"Failed to claim the items.";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public readonly LocalizedString SteamItemConsumeFailed = @"Failed to consume the item from Steam inventory.";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public readonly LocalizedString SteamItemsNotFound = @"Items not found in Steam inventory.";
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public readonly LocalizedString SteamInventoryRetrieveFailed = @"Failed to retrieve Steam inventory, contact an administrator.";
+    }
+
     #region Serialization
 
     public static bool Load()
@@ -1434,7 +1452,8 @@ public static partial class Strings
         public readonly UpnpNamespace Upnp = new UpnpNamespace();
 
         public readonly GuildsNamespace Guilds = new GuildsNamespace();
-
+        
+        public readonly SteamNamespace Steam = new SteamNamespace();
     }
 
     // ReSharper restore MemberHidesStaticFromOuterClass
@@ -1509,6 +1528,8 @@ public static partial class Strings
     public static TradingNamespace Trading => Root.Trading;
 
     public static UpnpNamespace Upnp => Root.Upnp;
+    
+    public static SteamNamespace Steam => Root.Steam;
 
     #endregion
 

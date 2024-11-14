@@ -1667,6 +1667,11 @@ public static partial class PacketSender
     {
         player.SendPacket(new HidePicturePacket());
     }
+    
+    public static void OpenSteamItemStore(Player player)
+    {
+        player.SendPacket(new OpenSteamItemStorePacket());
+    }
 
     //ShopPacket
     public static void SendOpenShop(Player player, ShopBase shop)

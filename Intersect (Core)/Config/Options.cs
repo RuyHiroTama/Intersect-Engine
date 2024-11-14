@@ -95,6 +95,8 @@ public partial class Options
     public InstancingOptions Instancing = new InstancingOptions();
 
     public ItemOptions Items = new ItemOptions();
+    
+    public SteamOptions Steam = new SteamOptions();
 
     public static Options Instance { get; private set; }
 

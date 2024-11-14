@@ -1326,6 +1326,16 @@ public static partial class CommandPrinter
         
         return Strings.EventCommandList.Fade.ToString(commandType, command.WaitForCompletion, command.DurationMs);
     }
+    
+    private static string GetCommandText(OpenSteamItemStoreCommmand command, MapInstance map)
+    {
+        return Strings.EventCommandList.opensteamitemstore;
+    }
+    
+    private static string GetCommandText(SteamItemClaim command, MapInstance map)
+    {
+        return Strings.EventCommandList.steamitemclaim;
+    }
 
     //Set Variable Modification Texts
     private static string GetVariableModText(SetVariableCommand command, VariableMod mod)

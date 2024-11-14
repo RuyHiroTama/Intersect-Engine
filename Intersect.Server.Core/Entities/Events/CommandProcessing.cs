@@ -12,6 +12,8 @@ using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
+using Intersect.Server.ThirdParty;
+using Intersect.Server.ThirdParty.Models;
 using Intersect.Utilities;
 using VariableMod = Intersect.Enums.VariableMod;
 
@@ -1650,6 +1652,73 @@ public static partial class CommandProcessing
         if (command.WaitForCompletion)
         {
             callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Fade;
+        }
+    }
+    
+    private static void ProcessCommand(
+        OpenSteamItemStoreCommmand command,
+        Player player,
+        Event instance,
+        CommandInstance stackInfo,
+        Stack<CommandInstance> callStack
+    )
+    {
+        PacketSender.OpenSteamItemStore(player);
+    }
+    
+    private static async void ProcessCommand(
+        SteamItemClaim command,
+        Player player,
+        Event instance,
+        CommandInstance stackInfo,
+        Stack<CommandInstance> callStack
+    )
+    {
+        int steamDefId = Options.Instance.Steam.ItemDefId;
+        Guid item = Options.Instance.Steam.ItemId;
+
+        var steamId = player.SteamId;
+        var items = await SteamHelper.GetSteamInventoryAsync(steamId);
+        if (items != null)
+        {
+            int totalQuantity = 0;
+            SteamInventoryItem itemToConsume = null;
+            foreach (var inventoryItem in items)
+            {
+                if (inventoryItem.ItemDefId == steamDefId)
+                {
+                    totalQuantity += inventoryItem.Quantity;
+                    itemToConsume = inventoryItem;
+                }
+            }
+
+            if (totalQuantity > 0 && itemToConsume != null)
+            {
+                var consumed = await SteamHelper.ConsumeSteamItemAsync(steamId, itemToConsume.ItemId, totalQuantity);
+                if (consumed)
+                {
+                    if (player.TryGiveItem(item, totalQuantity, ItemHandling.Normal, true, -1, true))
+                    {
+                        PacketSender.SendChatMsg(player, Strings.Steam.ItemsClaimedSuccess, ChatMessageType.Notice, Color.Green);
+                    }
+                    else
+                    {
+                        PacketSender.SendChatMsg(player, Strings.Steam.ItemsClaimedFailed, ChatMessageType.Error, Color.Red);
+                    }
+                }
+                else
+                {
+                    PacketSender.SendChatMsg(player, Strings.Steam.SteamItemConsumeFailed, ChatMessageType.Error, Color.Red);
+                }
+            }
+            else
+            {
+                PacketSender.SendChatMsg(player, Strings.Steam.SteamItemsNotFound, ChatMessageType.Error, Color.Red);
+            }
+        }
+        else
+        {
+            PacketSender.SendChatMsg(player, Strings.Steam.SteamInventoryRetrieveFailed, ChatMessageType.Error, Color.Red);
         }
     }
 

@@ -1029,3 +1029,13 @@ public partial class ScreenFadeCommand : EventCommand
 
     public int DurationMs { get; set; }
 }
+
+public partial class OpenSteamItemStoreCommmand : EventCommand
+{
+    public override EventCommandType Type { get; } = EventCommandType.OpenSteamItemStore;
+}
+
+public partial class SteamItemClaim : EventCommand
+{
+    public override EventCommandType Type { get; } = EventCommandType.SteamItemClaim;
+}

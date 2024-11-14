@@ -217,6 +217,9 @@ public partial class Player : Entity
     /// </summary>
     [NotMapped, JsonIgnore]
     public bool IsFading { get; set; }
+    
+    [NotMapped, JsonIgnore]
+    public ulong SteamId { get; set; }
 
     /// <summary>
     /// Reference stored of the last weapon used for an auto-attack

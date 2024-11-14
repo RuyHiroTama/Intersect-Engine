@@ -2941,6 +2941,16 @@ internal sealed partial class PacketHandler
         }
         player.IsFading = false;
     }
+    
+    public void HandlePacket(Client client, SteamDataPacket packet)
+    {
+        var player = client?.Entity;
+        if (player == null)
+        {
+            return;
+        }
+        player.SteamId = packet.SteamId;
+    }
 
     public void HandlePacket(Client client, TargetPacket packet)
     {

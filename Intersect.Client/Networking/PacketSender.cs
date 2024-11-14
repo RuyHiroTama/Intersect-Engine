@@ -515,6 +515,11 @@ public static partial class PacketSender
     {
         Network.SendPacket(new FadeCompletePacket());
     }
+    
+    public static void SendSteamId(ulong steamId)
+    {
+        Network.SendPacket(new SteamDataPacket(steamId));
+    }
 
     public static void SendTarget(Guid targetId)
     {

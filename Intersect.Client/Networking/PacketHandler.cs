@@ -25,6 +25,7 @@ using Intersect.Framework;
 using Intersect.Models;
 using MapAttribute = Intersect.Enums.MapAttribute;
 using Intersect.Client.Interface.Shared;
+using Intersect.Client.ThirdParty;
 using Intersect.Network.Packets.Client;
 
 namespace Intersect.Client.Networking;
@@ -185,6 +186,12 @@ internal sealed partial class PacketHandler
     {
         Main.JoinGame();
         Globals.JoiningGame = true;
+        
+        var steamId = Steam.GetSteamId();
+        if (steamId != null)
+        {
+            PacketSender.SendSteamId(steamId.Value);
+        }
     }
 
     public void HandlePacket(IPacketSender packetSender, MapAreaPacket packet)
@@ -2247,5 +2254,10 @@ internal sealed partial class PacketHandler
     public void HandlePacket(IPacketSender packetSender, SendClientResultCastFishingRod packet)
     {
         Globals.Me.fishEvent.FishingRodCastHundler(packet.IsSuccess);
+    }
+    
+    public void HandlePacket(IPacketSender packetSender, OpenSteamItemStorePacket packet)
+    {
+        Steam.OpenOverlayToUrl("https://store.steampowered.com/itemstore/1736200/");
     }
 }

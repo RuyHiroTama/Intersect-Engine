@@ -755,6 +755,16 @@ public partial class FrmEvent : Form
                 tmpCommand = new ScreenFadeCommand();
 
                 break;
+            
+            case EventCommandType.OpenSteamItemStore:
+                tmpCommand = new OpenSteamItemStoreCommmand();
+
+                break;
+            
+            case EventCommandType.SteamItemClaim:
+                tmpCommand = new SteamItemClaim();
+
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -1402,6 +1412,10 @@ public partial class FrmEvent : Form
             case EventCommandType.Fade:
                 cmdWindow = new EventCommand_ScreenFade((ScreenFadeCommand)command, this);
 
+                break;
+            case EventCommandType.OpenSteamItemStore:
+                break;
+            case EventCommandType.SteamItemClaim:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

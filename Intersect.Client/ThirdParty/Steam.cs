@@ -1,5 +1,6 @@
 using System.Reflection;
 using Intersect.Client.Framework.GenericClasses;
+using Intersect.Client.General;
 using Intersect.Client.MonoGame.NativeInterop;
 using Intersect.Logging;
 using Steamworks;
@@ -42,6 +43,13 @@ public static partial class Steam
 
         try
         {
+            // Remove this comments to enable Steam client verification
+            
+            // if (RestartAppIfNecessary())
+            // {
+            //     return;
+            // }
+
             var initializing = SteamAPI_InitSafe();
             initializing &= CSteamAPIContext_Init();
             if (initializing)
@@ -60,6 +68,26 @@ public static partial class Steam
             Log.Error(exception);
             Initialized = false;
         }
+    }
+
+    private static bool RestartAppIfNecessary()
+    {
+        try
+        {
+            if (SteamAPI.RestartAppIfNecessary((AppId_t)1736200))
+            {
+                Globals.IsRunning = false;
+                return true;
+            }
+        }
+        catch (DllNotFoundException e)
+        {
+            Log.Error("[Steamworks.NET] Could not load [lib]steam_api.dll/so/dylib. It's likely not in the correct location. Refer to the README for more details.\n" + e);
+            Globals.IsRunning = false;
+            return true;
+        }
+
+        return false;
     }
 
     public static bool Initialized { get; }
@@ -159,6 +187,26 @@ public static partial class Steam
         }
 
         return true;
+    }
+    
+    public static void OpenOverlayToUrl(string url)
+    {
+        if (!Initialized)
+        {
+            return;
+        }
+
+        SteamFriends.ActivateGameOverlayToWebPage(url);
+    }
+    
+    public static ulong? GetSteamId()
+    {
+        if (!Initialized)
+        {
+            return null;
+        }
+    
+        return SteamUser.GetSteamID().m_SteamID;
     }
 
     public static void PumpEvents()
